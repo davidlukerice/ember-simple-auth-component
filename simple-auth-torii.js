@@ -123,9 +123,12 @@ define("simple-auth-torii/authenticators/torii",
         @return {Ember.RSVP.Promise} A promise that resolves when the provider successfully authenticates a user and rejects otherwise
       */
       authenticate: function(provider) {
-        var _this = this;
+        var _this = this,
+            onlyProvider = (typeof options === 'string'),
+            toriiOptions = onlyProvider ? {} : options;
+        provider = onlyProvider ? options : options.provider;
         return new Ember.RSVP.Promise(function(resolve, reject) {
-          _this.torii.open(provider).then(function(data) {
+          _this.torii.open(provider, toriiOptions).then(function(data) {
             _this.resolveWith(provider, data, resolve);
           }, reject);
         });
